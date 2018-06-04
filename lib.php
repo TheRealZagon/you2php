@@ -5,6 +5,7 @@
  * @author ZXQ
  * @version V1.2
  * @description 核心操作函数集合
+ * English version by Zagon
  */
 
 require_once(dirname(__FILE__).'/config.php');
@@ -28,7 +29,7 @@ require_once(dirname(__FILE__).'/YouTubeDownloader.php');
    return $f;  
 }
 //获取类别热门视频
-function get_trending($apikey,$max,$pageToken='',$regionCode='vn'){
+function get_trending($apikey,$max,$pageToken='',$regionCode='us'){
     $apilink='https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&chart=mostPopular&regionCode='.$regionCode.'&maxResults='.$max.'&key='.$apikey.'&pageToken='.$pageToken;
      return json_decode(get_data($apilink),true);
 }
@@ -41,7 +42,7 @@ function get_trending($apikey,$max,$pageToken='',$regionCode='vn'){
 
 //获取用户频道数据
 function get_channel_info($cid,$apikey){
-   $apilink='https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&hl=zh&id='.$cid.'&key='.$apikey;
+   $apilink='https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&hl=en&id='.$cid.'&key='.$apikey;
    return json_decode(get_data($apilink),true);
 }
 
@@ -53,8 +54,8 @@ function get_related_video($vid,$apikey){
 
 
 //获取用户频道视频
-function get_channel_video($cid,$pageToken='',$apikey,$regionCode='VN'){
-   $apilink='https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&maxResults=50&type=video&regionCode='.$regionCode.'&hl=zh-CN&channelId='.$cid.'&key='.$apikey.'&pageToken='.$pageToken;
+function get_channel_video($cid,$pageToken='',$apikey,$regionCode='us'){
+   $apilink='https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&maxResults=50&type=video&regionCode='.$regionCode.'&hl=en-US&channelId='.$cid.'&key='.$apikey.'&pageToken='.$pageToken;
    return json_decode(get_data($apilink),true);
 }
 
@@ -63,7 +64,7 @@ function videoCategories($apikey=APIKEY,$regionCode=GJ_CODE){
    $apicache = '/tmp/ytb_videoCategories_'.$regionCode;
    $json = file_get_contents($apicache);
    if (empty($json)) {
-       $apilink='https://www.googleapis.com/youtube/v3/videoCategories?part=snippet&regionCode='.$regionCode.'&hl=zh-CN&key='.$apikey;
+       $apilink='https://www.googleapis.com/youtube/v3/videoCategories?part=snippet&regionCode='.$regionCode.'&hl=en-US&key='.$apikey;
        $json = get_data($apilink);
       file_put_contents($apicache,$json);
       file_put_contents($apicache.".ts","REQUEST_TIME: " . $_SERVER['REQUEST_TIME']);
@@ -93,14 +94,14 @@ function categorieslist($id){
 }
 
 //获取视频类别内容
-function Categories($id,$apikey,$pageToken='',$order='relevance',$regionCode='VN'){
-   $apilink='https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&&regionCode='.$regionCode.'&hl=zh-ZH&maxResults=48&videoCategoryId='.$id.'&key='.$apikey.'&order='.$order.'&pageToken='.$pageToken;
+function Categories($id,$apikey,$pageToken='',$order='relevance',$regionCode='US'){
+   $apilink='https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&&regionCode='.$regionCode.'&hl=en-US&maxResults=48&videoCategoryId='.$id.'&key='.$apikey.'&order='.$order.'&pageToken='.$pageToken;
    return json_decode(get_data($apilink),true);
 }
 
 
 //获取搜索数据
-function get_search_video($query,$apikey,$pageToken='',$type='video',$order='relevance',$regionCode='VN'){
+function get_search_video($query,$apikey,$pageToken='',$type='video',$order='relevance',$regionCode='US'){
    $apilink='https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=48&order='.$order.'&type='.$type.'&q='.$query.'&key='.$apikey.'&pageToken='.$pageToken;
    return json_decode(get_data($apilink),true);
 }
@@ -122,17 +123,17 @@ function format_date($time){
     $t=strtotime($time);
     $t=time()-$t;
     $f=array(
-    '31536000'=>'年',
-    '2592000'=>'个月',
-    '604800'=>'周',
-    '86400'=>'天',
-    '3600'=>'小时',
-    '60'=>'分钟',
-    '1'=>'秒'
+    '31536000'=>' Year',
+    '2592000'=>' Month',
+    '604800'=>' Week',
+    '86400'=>' Day',
+    '3600'=>' Hour',
+    '60'=>' Minute',
+    '1'=>' Second'
     );
     foreach ($f as $k=>$v)    {
         if (0 !=$c=floor($t/(int)$k)) {
-            return $c.$v.'前';
+            return $c.$v.'s';
         }
     }
 }
@@ -188,7 +189,7 @@ return $data = QueryList::Query(get_data($channel),$rules)->data;
 
 //采集抓取随机推荐内容
 function random_recommend(){
-   $dat=get_data('https://www.youtube.com/?gl='.constant("GJ_CODE").'&hl=zh-CN'); 
+   $dat=get_data('https://www.youtube.com/?gl='.constant("GJ_CODE").'&hl=en-US'); 
    $rules = array(
     't' => array('#feed .individual-feed .section-list li .item-section li .feed-item-container .feed-item-dismissable .shelf-title-table .shelf-title-row h2 .branded-page-module-title-text','text'),
     'html' => array('#feed .individual-feed .section-list li .item-section li .feed-item-container .feed-item-dismissable .compact-shelf .yt-viewport .yt-uix-shelfslider-list','html'),
@@ -217,9 +218,9 @@ function video_down($v,$name){
 $yt = new YouTubeDownloader();
 $links = $yt->getDownloadLinks("https://www.youtube.com/watch?v=$v");
 echo '<table class="table table-hover"><thead><tr>
-      <th>格式</th>
-      <th>类型</th>
-      <th>下载</th>
+      <th>Format</th>
+      <th>Types of</th>
+      <th>download</th>
     </tr>
   </thead>';
 foreach ($links as $value) {
@@ -268,12 +269,12 @@ function Hislist($str,$apikey){
 
 //获取频道所属国家
 $CountryID=array(
-    'DZ' => '阿尔及利亚',
-    'AR' => '阿根廷',
-    'AE' => '阿拉伯联合酋长国',
-    'OM' => '阿曼',
-    'AZ' => '阿塞拜疆',
-    'EG' => '埃及',
+    'DZ' => 'Algeria',
+    'AR' => 'Argentina',
+    'AE' => 'United Arab Emirates',
+    'OM' => 'Oman',
+    'AZ' => 'Azerbaijan',
+    'EG' => 'Egypt',
     'IE' => '爱尔兰',
     'EE' => '爱沙尼亚',
     'AT' => '奥地利',
@@ -290,7 +291,7 @@ $CountryID=array(
     'BA' => '波斯尼亚和黑塞哥维那',
     'DK' => '丹麦',
     'DE' => '德国',
-    'RU' => '俄罗斯',
+    'RU' => 'Russia',
     'FR' => '法国',
     'PH' => '菲律宾',
     'FI' => '芬兰',
@@ -311,22 +312,22 @@ $CountryID=array(
     'KE' => '肯尼亚',
     'LV' => '拉脱维亚',
     'LB' => '黎巴嫩',
-    'LT' => '立陶宛',
+    'LT' => 'Lituania',
     'LY' => '利比亚',
     'LU' => '卢森堡公国',
     'RO' => '罗马尼亚',
     'MY' => '马来西亚',
     'MK' => '马其顿',
-    'US' => '美国',
-    'PE' => '秘鲁',
+    'US' => 'United States',
+    'PE' => 'Peru',
     'MA' => '摩洛哥',
-    'MX' => '墨西哥',
+    'MX' => 'Mexico',
     'ZA' => '南非',
     'NP' => '尼泊尔',
     'NG' => '尼日利亚',
     'NO' => '挪威',
     'PT' => '葡萄牙',
-    'JP' => '日本',
+    'JP' => 'Japan',
     'SE' => '瑞典',
     'CH' => '瑞士',
     'RS' => '塞尔维亚',
@@ -342,7 +343,7 @@ $CountryID=array(
     'TR' => '土耳其',
     'UG' => '乌干达',
     'UA' => '乌克兰',
-    'ES' => '西班牙',
+    'ES' => 'Spain',
     'GR' => '希腊',
     'HK' => '香港',
     'SG' => '新加坡',
@@ -355,9 +356,9 @@ $CountryID=array(
     'IT' => '意大利',
     'IN' => '印度',
     'ID' => '印尼',
-    'GB' => '英国',
+    'GB' => 'United Kingdom',
     'JO' => '约旦',
-    'VN' => '越南',
+    'us' => 'Vietnam',
     'CL' => '智利',
     );
 function get_country($c){
@@ -446,7 +447,7 @@ function html5_player($id){
      if(array_key_exists('track',$array1) && array_key_exists('0',$array1['track'])){
          if (array_key_exists('track', $array1) && array_key_exists('0', $array1['track'
     									   ])) {
-    	foreach ($array1['track'] as $val) {if ($val['@attributes']['lang_code'] == 'en' || $val['@attributes']['lang_code'] == 'zh' || $val['@attributes']['lang_code'] =='zh-CN' || $val['@attributes']['lang_code'] =='zh-TW' || $val['@attributes']['lang_code'] =='zh-HK') {
+    	foreach ($array1['track'] as $val) {if ($val['@attributes']['lang_code'] == 'en' || $val['@attributes']['lang_code'] == 'en' || $val['@attributes']['lang_code'] =='en-US' || $val['@attributes']['lang_code'] =='en-US' || $val['@attributes']['lang_code'] =='en-US') {
     			$arr[$val['@attributes']['lang_code']] = "
     <track kind='captions' src='./tracks.php?vtt={$id}&lang=" . $val['@attributes']
     ['lang_code'] . "' srclang='" . $val['@attributes']['lang_code'] . "' label='" .
@@ -455,16 +456,16 @@ function html5_player($id){
     	}
     	foreach ($arr as $k => $v) {
     	    switch ($k) {
-    		    case 'zh-CN':
+    		    case 'en-US':
     		        $arr[$k] = substr_replace($v, ' default ', -2,0);
     				break;
-    			case 'zh':
+    			case 'en':
     		        $arr[$k] = substr_replace($v, ' default ', -2,0);
     				break;
-    			case 'zh-HK':
+    			case 'en-US':
     		        $arr[$k] = substr_replace($v, ' default ', -2,0);
     				break;
-    			case 'zh-TW':
+    			case 'en-US':
     				$arr[$k] = substr_replace($v, ' default ', -2,0);
     				break;
     			case 'en':
