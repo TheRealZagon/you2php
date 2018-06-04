@@ -16,7 +16,7 @@ ini_set('error_log', dirname(__FILE__) . '/error_log.txt');
     	case 'video':
             	   $videodata=get_search_video($q,APIKEY,$ptk,'video',$order,GJ_CODE);
             	   	if($videodata['pageInfo']['totalResults']<=1){
-    		    echo'<div class="alert alert-danger h4 p-3 m-2" role="alert">抱歉，没有找到与<strong>'.urldecode($q).'</strong>相关的视频。</div>';
+    		    echo'<div class="alert alert-danger h4 p-3 m-2" role="alert">Sorry, not found<strong>'.urldecode($q).'</strong>Related videos</div>';
     		    exit;
     		}
             	   echo '<ul  class="list-unstyled  video-list-thumbs row pt-1">';
@@ -37,14 +37,14 @@ ini_set('error_log', dirname(__FILE__) . '/error_log.txt');
                 echo '<div class="col-md-12">';
             if (array_key_exists("nextPageToken",$videodata) && array_key_exists("prevPageToken",$videodata) ) {
                
-                echo'<a class="btn btn-outline-primary  w-25 pull-left" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["prevPageToken"].'" data-toggle="">上一页</a>
-                      <a class="btn btn-outline-primary  w-25 pull-right" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["nextPageToken"].'" data-toggle="">下一页</a>
+                echo'<a class="btn btn-outline-primary  w-25 pull-left" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["prevPageToken"].'" data-toggle="">Previous</a>
+                      <a class="btn btn-outline-primary  w-25 pull-right" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["nextPageToken"].'" data-toggle="">Next</a>
                     ';
             } elseif (array_key_exists("nextPageToken",$videodata) && !array_key_exists("prevPageToken",$videodata)) {
-                echo '<a class="btn btn-outline-primary btn-block" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["nextPageToken"].'" data-toggle="">下一页</a>
+                echo '<a class="btn btn-outline-primary btn-block" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["nextPageToken"].'" data-toggle="">Next</a>
                     ';
             } elseif (!array_key_exists("nextPageToken",$videodata) && !array_key_exists("prevPageToken",$videodata)) {} else {
-                echo '<a class="btn btn-outline-primary btn-block" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["prevPageToken"].'" data-toggle="">上一页</a>' ;
+                echo '<a class="btn btn-outline-primary btn-block" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["prevPageToken"].'" data-toggle="">Previous</a>' ;
             }
             echo'</div>';
     		break;
@@ -79,21 +79,21 @@ ini_set('error_log', dirname(__FILE__) . '/error_log.txt');
     	            echo '<div class="col-md-12 pt-3">';
             if (array_key_exists("nextPageToken",$videodata) && array_key_exists("prevPageToken",$videodata) ) {
                
-                echo'<a class="btn btn-outline-primary  w-25 pull-left" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["prevPageToken"].'" data-toggle="">上一页</a>
-                      <a class="btn btn-outline-primary  w-25 pull-right" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["nextPageToken"].'" data-toggle="">下一页</a>
+                echo'<a class="btn btn-outline-primary  w-25 pull-left" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["prevPageToken"].'" data-toggle="">Previous</a>
+                      <a class="btn btn-outline-primary  w-25 pull-right" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["nextPageToken"].'" data-toggle="">Next</a>
                     ';
             } elseif (array_key_exists("nextPageToken",$videodata) && !array_key_exists("prevPageToken",$videodata)) {
-                echo '<a class="btn btn-outline-primary btn-block" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["nextPageToken"].'" data-toggle="">下一页</a>
+                echo '<a class="btn btn-outline-primary btn-block" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["nextPageToken"].'" data-toggle="">next</a>
                     ';
             } elseif (!array_key_exists("nextPageToken",$videodata) && !array_key_exists("prevPageToken",$videodata)) {} else {
-                echo '<a class="btn btn-outline-primary btn-block" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["prevPageToken"].'" data-toggle="">上一页</a>' ;
+                echo '<a class="btn btn-outline-primary btn-block" href="./search.php?q='.$_GET["q"].'&order='.$_GET["order"].'&type='.$_GET['type'].'&pageToken='.$videodata["prevPageToken"].'" data-toggle="">Previous</a>' ;
             }
             echo'</div>';
     		break;
     	case 'channels':
     		$video=get_channel_video($_GET['channelid'],$ptk,APIKEY,GJ_CODE);
     		if($video['pageInfo']['totalResults']<=1){
-    		    echo'<p>获取内容失败！此频道用户没有上传任何内容，或者频道内容受版权保护,暂时无法查看！</p>';
+    		    echo'<p>Failed to get content! This channel user has not uploaded any content, or the channel content is protected by copyright!</p>';
     		    exit;
     		}
     		foreach($video['items'] as $v) {
@@ -117,14 +117,14 @@ ini_set('error_log', dirname(__FILE__) . '/error_log.txt');
     
     if (array_key_exists("nextPageToken",$video) && array_key_exists("prevPageToken",$video) ) {
        
-        echo'<a class="btn btn-outline-primary m-1 w-25 pull-left" href="./channel.php?channelid='.$_GET['channelid'].'&pageToken='.$video['prevPageToken'].'" data-toggle="">上一页</a>
-              <a class="btn btn-outline-primary m-1 w-25 pull-right" href="./channel.php?channelid='.$_GET['channelid'].'&pageToken='.$video['nextPageToken'].'" data-toggle="">下一页</a>
+        echo'<a class="btn btn-outline-primary m-1 w-25 pull-left" href="./channel.php?channelid='.$_GET['channelid'].'&pageToken='.$video['prevPageToken'].'" data-toggle="">Previous</a>
+              <a class="btn btn-outline-primary m-1 w-25 pull-right" href="./channel.php?channelid='.$_GET['channelid'].'&pageToken='.$video['nextPageToken'].'" data-toggle="">Next</a>
             ';
     } elseif (array_key_exists("nextPageToken",$video) && !array_key_exists("prevPageToken",$video)) {
-        echo '<a class="btn btn-outline-primary m-1 btn-block" href="./channel.php?channelid='.$_GET['channelid'].'&pageToken='.$video['nextPageToken'].'" data-toggle="">下一页</a>
+        echo '<a class="btn btn-outline-primary m-1 btn-block" href="./channel.php?channelid='.$_GET['channelid'].'&pageToken='.$video['nextPageToken'].'" data-toggle="">Next</a>
             ';
     } elseif (!array_key_exists("nextPageToken",$video) && !array_key_exists("prevPageToken",$video)) {} else {
-        echo '<a class="btn btn-outline-primary m-1 btn-block" href="./channel.php?channelid='.$_GET['channelid'].'&pageToken='.$video['prevPageToken'].'" data-toggle="">上一页</a>' ;
+        echo '<a class="btn btn-outline-primary m-1 btn-block" href="./channel.php?channelid='.$_GET['channelid'].'&pageToken='.$video['prevPageToken'].'" data-toggle="">Previous</a>' ;
     }
     echo'</div>';
     break;
@@ -153,15 +153,14 @@ ini_set('error_log', dirname(__FILE__) . '/error_log.txt');
         $vica=videoCategories();
         
         echo '<ul class="list-group text-dark">
-        <li class="list-group-item font-weight-bold"><i class="fa fa-home fa-fw pr-4"></i><a href="./" class="text-dark">首页</a></li>
-        <li class="list-group-item"><i class="fa fa-fire fa-fw pr-4"></i><a href="./content.php?cont=trending" class="text-dark">时下流行</a></li>
-        <li class="list-group-item"><i class="fa fa-history fa-fw pr-4"></i><a href="./content.php?cont=history" class="text-dark">历史记录</a></li>
-        <li class="list-group-item"><i class="fa fa-gavel fa-fw pr-4"></i><a href="./content.php?cont=DMCA"class="text-dark">DMCA</a></li>
-        <li class="list-group-item"><i class="fa fa-cloud-download fa-fw pr-4"></i><a href="./content.php?cont=video" class="text-dark">视频下载</a></li>
-        <li class="list-group-item"><i class="fa fa-file-code-o fa-fw pr-4 pr-4"></i><a href="./content.php?cont=api" class="text-dark">API</a></li>
+        <li class="list-group-item font-weight-bold"><i class="fa fa-home fa-fw pr-4"></i><a href="./" class="text-dark">Home</a></li>
+		<li class="list-group-item"><i class="fa fa-home fa-fw pr-4"></i><a href="https://www.zagon.net.pe" class="text-dark">Zagon website</a></li>
+        <li class="list-group-item"><i class="fa fa-fire fa-fw pr-4"></i><a href="./content.php?cont=trending" class="text-dark">Trending</a></li>
+        <li class="list-group-item"><i class="fa fa-history fa-fw pr-4"></i><a href="./content.php?cont=history" class="text-dark">History</a></li>
+        <li class="list-group-item"><i class="fa fa-cloud-download fa-fw pr-4"></i><a href="./content.php?cont=video" class="text-dark">Video downloader</a></li>
         </ul>
         <ul class="list-group pt-3">
-        <li class="list-group-item font-weight-bold"></i>YOUTUBE 精选</li>
+        <li class="list-group-item font-weight-bold"></i>Categories:</li>
         ';
         foreach($vica as $v){
         echo '<li class="list-group-item"><a href="./content.php?cont=category&sortid='.$v['id'].'" class="text-dark">'.$v['snippet']['title'].'</a></li>';    
@@ -190,7 +189,7 @@ ini_set('error_log', dirname(__FILE__) . '/error_log.txt');
     case 'DMCA':
         echo '<div class="font-weight-bold h6 pb-1">DMCA及免责声明</div>';
         echo '<h6><b>DMCA：</b><h6>';
-        echo '<p class="h6" style="line-height: 1.7">This site video content from the Internet.<br>
+        echo '<p class="h6" style="line-height: 1.7">This site retrieves content from the Internet.<br>
 If inadvertently violate your copyright.<br>
 Send copyright complaints to '.EMAIL.'! We will response within 48 hours!<br></p>';
 echo '<h6 class="pt-3"><b>用户须知：</b><h6>';
@@ -223,7 +222,7 @@ echo '<h6 class="pt-3"><b>用户须知：</b><h6>';
         echo '<form  onsubmit="return false" id="ipt">
   <div class="form-group text-center" >
   <input name="type" value="videodownload" style="display: none;">
-      <input type="text" name="link"  placeholder="请输入Youtube视频链接" id="soinpt"  autocomplete="off" /><button type="submit" id="subu" style="width: 24%;vertical-align:middle;border: none;height: 50px;background-color: #e62117;color: #fff;font-size: 18px;display: inline-block;" ><i class="fa fa-download fa-lg pr-1"></i>下载</button>
+      <input type="text" name="link"  placeholder="Place your URL here..." id="soinpt"  autocomplete="off" /><button type="submit" id="subu" style="width: 24%;vertical-align:middle;border: none;height: 50px;background-color: #e62117;color: #fff;font-size: 18px;display: inline-block;" ><i class="fa fa-download fa-lg pr-1"></i>Download!</button>
   </div>
     </form>';
     if(isset($_GET['type']) && isset($_GET['v'])){
@@ -234,7 +233,7 @@ echo '<h6 class="pt-3"><b>用户须知：</b><h6>';
         echo video_down($_GET['v'],$viddata['items']['0']['snippet']['title']);  
         echo '</div>';
     }else{
-        echo '<div id="videoslist" class="text-center"><p>提示:如果无法下载,请选择右键另存为!<p></div>'; 
+        echo '<div id="videoslist" class="text-center"><p>                              <p></div>';  		
     }
     echo '<script>
      $("#subu").click(function() {$("#videoslist").load(\'./ajax/ajax.php\',$("#ipt").serialize());});
@@ -305,7 +304,7 @@ echo '<h6 class="pt-3"><b>用户须知：</b><h6>';
      
      
     case 'videodownload': 
-        if(stripos($_GET['link'],'youtu.be') !== false || stripos($_GET['link'],'youtube.com') !== false || stripos($_GET['link'],'watch?v=') !== false  ){}else{echo '<h6>非法请求</h6>';break;exit();}
+        if(stripos($_GET['link'],'youtu.be') !== false || stripos($_GET['link'],'youtube.com') !== false || stripos($_GET['link'],'watch?v=') !== false  ){}else{echo '<h6>Illegal request.</h6>';break;exit();}
         preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $_GET['link'], $mats);
         $viddata=get_video_info($mats[1],APIKEY);
         echo '<h5>'.$viddata['items']['0']['snippet']['title'].'</h5>';
@@ -317,7 +316,7 @@ echo '<h6 class="pt-3"><b>用户须知：</b><h6>';
     $category=Categories($sortid,APIKEY,$ptk,$order,GJ_CODE);
     if($category['pageInfo']['totalResults']=='0'){
         echo '<div class="alert alert-danger m-2" role="alert">
-                <strong>抱歉！</strong> 因版权方限制，本类内容暂时不提供浏览!
+                <strong>Sorry!</strong> Due to copyright restrictions, this category is not available at this time!
               </div>';
               exit();
     }
@@ -336,14 +335,14 @@ echo '<h6 class="pt-3"><b>用户须知：</b><h6>';
     echo '</ul>';
     if (array_key_exists("nextPageToken",$category) && array_key_exists("prevPageToken",$category) ) {
        
-        echo'<a class="btn btn-outline-primary m-1 w-25 pull-left" href="./content.php?cont=category&sortid='.$sortid.'&order='.$_GET["order"].'&pageToken='.$category['prevPageToken'].'" data-toggle="">上一页</a>
-              <a class="btn btn-outline-primary m-1 w-25 pull-right" href="./content.php?cont=category&sortid='.$sortid.'&order='.$_GET["order"].'&pageToken='.$category['nextPageToken'].'" data-toggle="">下一页</a>
+        echo'<a class="btn btn-outline-primary m-1 w-25 pull-left" href="./content.php?cont=category&sortid='.$sortid.'&order='.$_GET["order"].'&pageToken='.$category['prevPageToken'].'" data-toggle="">Previous</a>
+              <a class="btn btn-outline-primary m-1 w-25 pull-right" href="./content.php?cont=category&sortid='.$sortid.'&order='.$_GET["order"].'&pageToken='.$category['nextPageToken'].'" data-toggle="">Next</a>
             ';
     } elseif (array_key_exists("nextPageToken",$category) && !array_key_exists("prevPageToken",$category)) {
-        echo '<a class="btn btn-outline-primary m-1 btn-block" href="./content.php?cont=category&sortid='.$sortid.'&order='.$_GET["order"].'&pageToken='.$category['nextPageToken'].'" data-toggle="">下一页</a>
+        echo '<a class="btn btn-outline-primary m-1 btn-block" href="./content.php?cont=category&sortid='.$sortid.'&order='.$_GET["order"].'&pageToken='.$category['nextPageToken'].'" data-toggle="">Next</a>
             ';
     } elseif (!array_key_exists("nextPageToken",$category) && !array_key_exists("prevPageToken",$category)) {} else {
-        echo '<a class="btn btn-outline-primary m-1 btn-block" href="./content.php?cont=category&sortid='.$sortid.'&order='.$_GET["order"].'&pageToken='.$category['prevPageToken'].'" data-toggle="">上一页</a>' ;
+        echo '<a class="btn btn-outline-primary m-1 btn-block" href="./content.php?cont=category&sortid='.$sortid.'&order='.$_GET["order"].'&pageToken='.$category['prevPageToken'].'" data-toggle="">Previous</a>' ;
     }
     
     break;    
